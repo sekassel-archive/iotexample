@@ -14,6 +14,7 @@ public class ServicePagerAdapter extends FragmentStatePagerAdapter {
 
     public ServicePagerAdapter(FragmentManager fm) {
         super(fm);
+        mServices.add("http://avocado.uniks.de:13345/api");
     }
 
     @Override

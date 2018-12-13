@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">IotExample</string>
+    <string name="click_button_text">click me</string>
+</resources>

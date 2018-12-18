@@ -23,9 +23,9 @@ public class ActionViewHolder extends RecyclerView.ViewHolder {
         super(view);
     }
 
-    public void onBind(JSONObject jsonObject) {
+    public void onBind(JSONObject jsonObject, final JSONObject docu) {
 
-        final String serviceurl = jsonObject.keys().next();
+        final String serviceurl = jsonObject.optString("endpoint");
 
         Button button = itemView.findViewById(R.id.button);
         button.setText(serviceurl);
@@ -33,7 +33,7 @@ public class ActionViewHolder extends RecyclerView.ViewHolder {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ActionTask().execute("http://avocado.uniks.de:13345/api"+ serviceurl);
+                new ActionTask().execute(docu.optString("apiBase")+ serviceurl);
             }
         });
 

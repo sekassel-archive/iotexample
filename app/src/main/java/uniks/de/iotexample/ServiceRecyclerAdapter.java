@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import uniks.de.iotexample.viewholder.ActionViewHolder;
+import uniks.de.iotexample.viewholder.ChartViewHolder;
 import uniks.de.iotexample.viewholder.TextViewHolder;
 
 public class ServiceRecyclerAdapter extends RecyclerView.Adapter {
@@ -38,11 +39,12 @@ public class ServiceRecyclerAdapter extends RecyclerView.Adapter {
                 JSONObject jsonObject = mServices.get(position - 2);
 
                 try {
-                    JSONObject serviceDescription = jsonObject.getJSONObject(jsonObject.keys().next());
-                    String kind = serviceDescription.getString("kind");
+                    String kind = jsonObject.getString("kind");
 
                     if ("action".equals(kind)){
                         return ActionViewHolder.VIEW_TYPE;
+                    }else if ("timeseries".equals(kind)){
+                        return ChartViewHolder.VIEW_TYPE;
                     }
 
                 } catch (JSONException e) {
@@ -72,6 +74,10 @@ public class ServiceRecyclerAdapter extends RecyclerView.Adapter {
                 View actionView = layoutInflater.inflate(R.layout.action_card_view, viewGroup, false);
                 viewHolder = new ActionViewHolder(actionView);
                 break;
+            case ChartViewHolder.VIEW_TYPE:
+                View chartView = layoutInflater.inflate(R.layout.chart_card_view, viewGroup, false);
+                viewHolder = new ChartViewHolder(chartView);
+                break;
             default: new RuntimeException();
         }
 
@@ -97,7 +103,10 @@ public class ServiceRecyclerAdapter extends RecyclerView.Adapter {
 
         }else if (viewHolder instanceof ActionViewHolder) {
             ActionViewHolder actionViewHolder = (ActionViewHolder) viewHolder;
-            actionViewHolder.onBind(mServices.get(position-2));
+            actionViewHolder.onBind(mServices.get(position-2),docu);
+        }else if (viewHolder instanceof ChartViewHolder) {
+            ChartViewHolder chartViewHolder = (ChartViewHolder) viewHolder;
+            chartViewHolder.onBind(mServices.get(position-2),docu);
         }
 
     }
@@ -115,7 +124,7 @@ public class ServiceRecyclerAdapter extends RecyclerView.Adapter {
 
             for (int i = 0; i < services.length(); i++) {
                 JSONObject jsonObject = services.getJSONObject(i);
-                if (jsonObject.getJSONObject(jsonObject.keys().next()).has("kind")){
+                if (jsonObject.has("kind")){
                     mServices.add(services.getJSONObject(i));
                 }
             }
